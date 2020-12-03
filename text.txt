@@ -1,4 +1,0 @@
-The open function creates and returns a new file descriptor for the file named
- by filename. Initially, the file position indicator for the file is at the
- beginning of the file. The argument mode (see Permission Bits) is used only
- when a file is created, but it doesn’t hurt to supply the argument in any case. 
