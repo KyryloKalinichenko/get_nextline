@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kkalinic <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/12/04 14:47:09 by kkalinic          #+#    #+#             */
+/*   Updated: 2020/12/04 14:48:07 by kkalinic         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "get_next_line.h"
 #include <unistd.h>
 #include <stdio.h>
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char		*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	size_t	i;
 	size_t	j;
@@ -30,7 +42,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (NULL);
 }
 
-char	*ft_strdup(const char *s)
+char		*ft_strdup(const char *s)
 {
 	char	*dup;
 	int		i;
@@ -58,7 +70,7 @@ char		*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char		*ft_strjoin(char const *s1, char const *s2)
 {
 	char *a;
 
@@ -75,7 +87,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (NULL);
 }
 
-size_t	ft_strlen(const char *s)
+size_t		ft_strlen(const char *s)
 {
 	int i;
 
@@ -84,4 +96,3 @@ size_t	ft_strlen(const char *s)
 		i++;
 	return (i);
 }
-
