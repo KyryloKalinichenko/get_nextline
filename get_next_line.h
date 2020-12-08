@@ -6,15 +6,19 @@
 /*   By: kkalinic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/04 14:50:25 by kkalinic          #+#    #+#             */
-/*   Updated: 2020/12/04 14:53:06 by kkalinic         ###   ########.fr       */
+/*   Updated: 2020/12/04 15:35:23 by kkalinic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
 
-# define BUFF_SIZE 1000000
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE
+# endif
+
 # include <stdlib.h>
+# include <stdio.h>
 
 typedef struct		s_list
 {
