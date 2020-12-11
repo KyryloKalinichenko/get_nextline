@@ -6,7 +6,7 @@
 /*   By: kkalinic <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 12:46:55 by kkalinic          #+#    #+#             */
-/*   Updated: 2020/12/04 16:00:16 by kkalinic         ###   ########.fr       */
+/*   Updated: 2020/12/11 14:13:13 by kkalinic         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,8 +100,7 @@ int					get_next_line(int fd, char **line)
 	int				i;
 	char			*tmp;
 
-	if ((BUFFER_SIZE + 1) <= 1 || !line ||
-			(!(buff = malloc(sizeof(char) * BUFFER_SIZE +1))))
+	if ((BUFFER_SIZE + 1) <= 1 || !line || !(buff = malloc(sizeof(char) * BUFFER_SIZE +1)))
 		return (-1);
 	while ((i = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
@@ -122,23 +121,24 @@ int					get_next_line(int fd, char **line)
 		free(buff);
 	return (ft_gnl_cond(list[fd].content, &list[fd], line, i));
 }
-
-int main()
-{
-	char *line;
-	int fd;
-	int fd2;
-
-
-	line = "HEllo";
-	fd = open("text.txt", O_RDONLY);
-	fd2 = 0;
-	while (0 < (fd2 = get_next_line(fd, &line)))
-	{
-		printf("%s", line);
-		printf("\n--------------\n");
-		free(line);
-	}
-	printf("%i\n", fd2);
-	close(fd);
-}
+/*
+**int main()
+**{
+**	char *line;
+**	int fd;
+**	int fd2;
+**
+**
+**	line = "HEllo";
+**	fd = open("text.txt", O_RDONLY);
+**	fd2 = 0;
+**	while (0 < (fd2 = get_next_line(0, &line)))
+**	{
+**		printf("%s", line);
+**		printf("\n--------------\n");
+**		free(line);
+**	}
+**	printf("%i\n", fd2);
+**	close(fd);
+**}
+*/
