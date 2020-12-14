@@ -47,13 +47,17 @@ char		*ft_strdup(const char *s)
 	int		i;
 
 	i = -1;
-	dup = malloc(sizeof(char) * (ft_strlen((char*)s) + 1));
-	if (dup == NULL)
-		return (NULL);
-	while (s[++i])
-		dup[i] = s[i];
-	dup[i] = '\0';
-	return (dup);
+	if (s)
+	{
+		dup = malloc(sizeof(char) * (ft_strlen((char*)s) + 1));
+		if (dup == NULL)
+			return (NULL);
+		while (s[++i])
+			dup[i] = s[i];
+		dup[i] = '\0';
+		return (dup);
+	}
+	return (NULL);
 }
 
 char		*ft_strchr(const char *s, int c)
