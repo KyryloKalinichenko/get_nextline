@@ -58,13 +58,16 @@ char		*ft_strdup(const char *s)
 
 char		*ft_strchr(const char *s, int c)
 {
-	if ((char)c == '\0')
-		return ((char *)s + ft_strlen(s));
-	while (*s)
+	if (s)
 	{
-		if (*s == c)
-			return ((char *)s);
-		s++;
+		if ((char)c == '\0')
+			return ((char *)s + ft_strlen(s));
+		while (*s)
+		{
+			if (*s == c)
+				return ((char *)s);
+			s++;
+		}
 	}
 	return (NULL);
 }
