@@ -100,7 +100,8 @@ int					get_next_line(int fd, char **line)
 	int				i;
 	char			*tmp;
 
-	if ((BUFFER_SIZE + 1) <= 1 || !line || !(buff = malloc(sizeof(char) * BUFFER_SIZE +1)))
+	if ((BUFFER_SIZE + 1) <= 1 || !line ||
+			!(buff = malloc(sizeof(char) * BUFFER_SIZE + 1)))
 		return (-1);
 	while ((i = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
@@ -113,12 +114,10 @@ int					get_next_line(int fd, char **line)
 			if (ft_strchr(tmp, '\n'))
 				break ;
 		}
-		else
-			if (NULL == (list[fd].content = ft_strdup(buff)))
-				return (-1);
+		else if (NULL == (list[fd].content = ft_strdup(buff)))
+			return (-1);
 	}
-	if (buff != NULL)
-		free(buff);
+	free(buff);
 	return (ft_gnl_cond(list[fd].content, &list[fd], line, i));
 }
 /*
