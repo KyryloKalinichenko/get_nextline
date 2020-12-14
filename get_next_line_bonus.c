@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <unistd.h>
+#include <fcntl.h>
 #include "get_next_line.h"
 
 char				*ft_strcat(char *dest, const char *src)
@@ -94,19 +95,18 @@ static int			ft_gnl_cond(char *content, t_list *list, char **line, int i)
 
 int					get_next_line(int fd, char **line)
 {
-	static t_list	list[4096];
-	char			buff[BUFF_SIZE + 1];
+	static t_list	list[FOPEN_MAX];
+	char			*buff;
 	int				i;
 	char			*tmp;
 
-	while ((i = read(fd, buff, BUFF_SIZE)) > 0)
+	if ((BUFFER_SIZE + 1) <= 1 || !line ||
+			!(buff = malloc(sizeof(char) * BUFFER_SIZE + 1)))
+		return (-1);
+	while ((i = read(fd, buff, BUFFER_SIZE)) > 0)
 	{
-		if (i == -1)
-			return (-1);
 		buff[i] = '\0';
-		if (list[fd].content == NULL)
-			list[fd].content = ft_strdup(buff);
-		else
+		if (list[fd].content != NULL)
 		{
 			tmp = ft_strjoin(list[fd].content, buff);
 			free(list[fd].content);
@@ -114,6 +114,9 @@ int					get_next_line(int fd, char **line)
 			if (ft_strchr(tmp, '\n'))
 				break ;
 		}
+		else if (NULL == (list[fd].content = ft_strdup(buff)))
+			return (-1);
 	}
+	free(buff);
 	return (ft_gnl_cond(list[fd].content, &list[fd], line, i));
 }
