@@ -118,7 +118,7 @@ int					get_next_line(int fd, char **line)
 			return (-1);
 	}
 	free(buff);
-	return (ft_gnl_cond(list[fd].content, &list[fd], line, i));
+	return (i == -1 ? -1 : ft_gnl_cond(list[fd].content, &list[fd], line, i));
 }
 /*
 **int main()
