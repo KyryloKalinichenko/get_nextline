@@ -67,16 +67,18 @@ static int			ft_skip(char *str, t_list *list, char **line, int r)
 		i++;
 	if (i < ft_strlen(list->content))
 	{
-		*line = ft_substr(list->content, 0, i);
-		tmp = ft_substr(list->content, i + 1, ft_strlen(list->content));
+		if (!(*line = ft_substr(list->content, 0, i)) ||
+			!(tmp = ft_substr(list->content, i + 1, ft_strlen(list->content))))
+			return (-1);
 		free(list->content);
-		list->content = ft_strdup(tmp);
+		if (!(list->content = ft_strdup(tmp)))
+			return (-1);
 		free(tmp);
 	}
 	else if (r == 0)
 	{
 		*line = list->content;
-		list->content = ft_strdup("");
+		list->content = NULL;
 		return (0);
 	}
 	return (1);
@@ -87,7 +89,10 @@ static int			ft_gnl_cond(char *content, t_list *list, char **line, int i)
 	if (i <= 0 && !content)
 	{
 		if (i == 0)
-			*line = ft_strdup("");
+		{
+			if (!(*line = ft_strdup("")))
+				return (-1);
+		}
 		return (i);
 	}
 	return (ft_skip(content, list, line, i));
@@ -108,7 +113,8 @@ int					get_next_line(int fd, char **line)
 		buff[i] = '\0';
 		if (list[fd].content != NULL)
 		{
-			tmp = ft_strjoin(list[fd].content, buff);
+			if (!(tmp = ft_strjoin(list[fd].content, buff)))
+				return (-1);
 			free(list[fd].content);
 			list[fd].content = tmp;
 			if (ft_strchr(tmp, '\n'))
@@ -127,17 +133,21 @@ int					get_next_line(int fd, char **line)
 **	int fd;
 **	int fd2;
 **
-**
 **	line = "HEllo";
-**	fd = open("text.txt", O_RDONLY);
+**	fd = open("42_with_nl", O_RDONLY);
 **	fd2 = 0;
-**	while (0 < (fd2 = get_next_line(0, &line)))
+**	while (0 < (fd2 = get_next_line(fd, &line)))
 **	{
 **		printf("%s", line);
 **		printf("\n--------------\n");
 **		free(line);
+**		printf("%i\n", fd2);
 **	}
-**	printf("%i\n", fd2);
+**		printf("%s", line);
+**		printf("\n--------------\n");
+**		printf("%i\n", fd2);
+**	if (fd > 0)
+**		free(line);
 **	close(fd);
 **}
 */
