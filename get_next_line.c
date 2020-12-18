@@ -57,25 +57,27 @@ char				*ft_strncpy(char *dest, const char *src, size_t n)
 	return (dest);
 }
 
-static int			ft_skip(char *str, t_list *list, char **line, int r)
+static int			ft_skip(size_t i, t_list *list, char **line, size_t len)
 {
-	unsigned int	i;
-	char			*tmp;
-
-	i = 0;
-	while (str[i] != '\0' && str[i] != '\n')
-		i++;
-	if (i < ft_strlen(list->content))
+	if (i < len)
 	{
-		if (!(*line = ft_substr(list->content, 0, i)) ||
-			!(tmp = ft_substr(list->content, i + 1, ft_strlen(list->content))))
+		if (!(*line = ft_substr(list->content, 0, i)))
 			return (-1);
+		if (!(list->tmp = ft_substr(list->content, i + 1, len)))
+		{
+			free(*line);
+			return (-1);
+		}
 		free(list->content);
-		if (!(list->content = ft_strdup(tmp)))
+		if (!(list->content = ft_strdup(list->tmp)))
+		{
+			free(*line);
+			free(list->tmp);
 			return (-1);
-		free(tmp);
+		}
+		free(list->tmp);
 	}
-	else if (r == 0)
+	else if (list->r == 0)
 	{
 		*line = list->content;
 		list->content = NULL;
@@ -84,18 +86,28 @@ static int			ft_skip(char *str, t_list *list, char **line, int r)
 	return (1);
 }
 
-static int			ft_gnl_cond(char *content, t_list *list, char **line, int i)
+static int			ft_gnl_cond(char *content, t_list *list, char **line)
 {
-	if (i <= 0 && !content)
+	unsigned int	j;
+	unsigned int	len;
+
+	j = 0;
+	len = ft_strlen(list->content);
+	if (list->r <= 0 && !content)
 	{
-		if (i == 0)
+		if (list->r == 0)
 		{
 			if (!(*line = ft_strdup("")))
 				return (-1);
 		}
-		return (i);
+		return (list->r);
 	}
-	return (ft_skip(content, list, line, i));
+	if (content)
+	{
+		while (content[j] != '\0' && content[j] != '\n')
+			j++;
+	}
+	return (ft_skip(j, list, line, len));
 }
 
 int					get_next_line(int fd, char **line)
@@ -103,7 +115,6 @@ int					get_next_line(int fd, char **line)
 	static t_list	list[FOPEN_MAX];
 	char			*buff;
 	int				i;
-	char			*tmp;
 
 	if ((BUFFER_SIZE + 1) <= 1 || !line ||
 			!(buff = malloc(sizeof(char) * BUFFER_SIZE + 1)))
@@ -113,18 +124,19 @@ int					get_next_line(int fd, char **line)
 		buff[i] = '\0';
 		if (list[fd].content != NULL)
 		{
-			if (!(tmp = ft_strjoin(list[fd].content, buff)))
-				return (-1);
+			if (!(list[fd].tmp = ft_strjoin(list[fd].content, buff)))
+				i = -1;
 			free(list[fd].content);
-			list[fd].content = tmp;
-			if (ft_strchr(tmp, '\n'))
-				break ;
+			list[fd].content = list[fd].tmp;
 		}
 		else if (NULL == (list[fd].content = ft_strdup(buff)))
-			return (-1);
+			i = -1;
+		if (ft_strchr(buff, '\n') || i == -1)
+			break ;
 	}
 	free(buff);
-	return (i == -1 ? -1 : ft_gnl_cond(list[fd].content, &list[fd], line, i));
+	list->r = i;
+	return (i == -1 ? -1 : ft_gnl_cond(list[fd].content, &list[fd], line));
 }
 /*
 **int main()
@@ -143,9 +155,6 @@ int					get_next_line(int fd, char **line)
 **		free(line);
 **		printf("%i\n", fd2);
 **	}
-**		printf("%s", line);
-**		printf("\n--------------\n");
-**		printf("%i\n", fd2);
 **	if (fd > 0)
 **		free(line);
 **	close(fd);

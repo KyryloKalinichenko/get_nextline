@@ -22,8 +22,8 @@
 
 typedef struct		s_list
 {
-	void			*content;
-	struct s_list	*next;
+	void	*con;
+	char	*tmp;
 }					t_list;
 
 int					get_next_line(int fd, char **line);
